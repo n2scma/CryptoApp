@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import HistoricalDataScreen from './HistoricalDataScreen';
 
 const CryptoScreen = ({ navigation }) => {
   const [cryptos, setCryptos] = useState([]);
@@ -21,7 +22,7 @@ const CryptoScreen = ({ navigation }) => {
   }, []);
 
   const handleCryptoPress = (crypto) => {
-    navigation.navigate('HistoricalData', { crypto });
+    navigation.navigate('HistoricalDataScreen', { crypto });
   };
 
   const renderItem = ({ item }) => (
@@ -30,6 +31,8 @@ const CryptoScreen = ({ navigation }) => {
       <Text>${item.current_price}</Text>
     </TouchableOpacity>
   );
+
+  
 
   return (
     <View style={styles.container}>

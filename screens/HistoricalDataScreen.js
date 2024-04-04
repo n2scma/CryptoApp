@@ -1,5 +1,3 @@
-// HistoricalDataScreen.js
-
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import axios from 'axios';
@@ -7,7 +5,7 @@ import moment from 'moment'; // Import moment.js for date formatting
 
 const HistoricalDataScreen = ({ route }) => {
   const { crypto } = route.params;
-  const [historicalData, setHistoricalData] = useState([]);
+  const [historicalData, setHistoricalData] = useState([]); // Add historicalData state variable
 
   useEffect(() => {
     const fetchHistoricalData = async () => {
@@ -28,7 +26,6 @@ const HistoricalDataScreen = ({ route }) => {
     <View style={styles.container}>
       <Text>{crypto.name} Historical Data (Past 30 Days)</Text>
       <View style={styles.chartContainer}>
-        {/* Display historical data here */}
         {historicalData.map((dataPoint, index) => (
           <Text key={index}>{moment(dataPoint[0]).format('MMMM Do YYYY, h:mm:ss a')}: ${dataPoint[1]}</Text>
         ))}

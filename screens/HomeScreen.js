@@ -1,27 +1,69 @@
-import React from 'react';
-import { StyleSheet, View, Button, Text } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+// CryptoScreen.js
 
-const HomeScreen = () => {
-  const navigation = useNavigation();
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import axios from 'axios';
+import HistoricalDataScreen from './HistoricalDataScreen';
 
-  const handleNavigateToCrypto = () => {
-    navigation.navigate('Crypto');
+const CryptoScreen = ({ navigation }) => {
+  const [cryptos, setCryptos] = useState([]);
+
+  useEffect(() => {
+    const fetchCryptos = async () => {
+      try {
+        const response = await axios.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false');
+        setCryptos(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchCryptos();
+  }, []);
+
+  const handleCryptoPress = (crypto) => {
+    navigation.navigate('HistoricalDataScreen', { crypto });
   };
 
+  const renderItem = ({ item }) => (
+    <TouchableOpacity style={styles.cryptoContainer} onPress={() => handleCryptoPress(item)}>
+      <Text>{item.name}</Text>
+      <Text>${item.current_price}</Text>
+    </TouchableOpacity>
+  );
+
+  const HomeScreen = ({ navigation }) => {
+    return (
+        navigation.navigate('HistoricalDataScreen', { crypto })
+  )};
+  
+
   return (
-    <Text>
-        Home screen will be here soon...
-    </Text>
+    <View style={styles.container}>
+      <FlatList
+        data={cryptos}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: '#fff',
+    padding: 20,
+  },
+  cryptoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
   },
 });
 
-export default HomeScreen;
+export default CryptoScreen;

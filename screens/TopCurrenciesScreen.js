@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import axios from 'axios';
+import HistoricalDataScreen from './HistoricalDataScreen';
 
 const TopCryptocurrenciesScreen = ({ navigation }) => {
   const [topCryptocurrencies, setTopCryptocurrencies] = useState([]);
@@ -28,8 +29,11 @@ const TopCryptocurrenciesScreen = ({ navigation }) => {
 
   const handleCryptocurrencyPress = async (cryptocurrency) => {
     try {
+      // Fetch historical data for the selected cryptocurrency
       const historicalData = await fetchHistoricalData(cryptocurrency.id);
-      navigation.navigate('HistoricalData', { cryptocurrency, historicalData });
+  
+      // Navigate to the "HistoricalData" screen with cryptocurrency and historical data
+      navigation.navigate('HistoricalDataScreen', { cryptocurrency, historicalData });
     } catch (error) {
       console.error('Error fetching historical data: ', error);
     }
